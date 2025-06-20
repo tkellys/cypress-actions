@@ -1,0 +1,27 @@
+name: Cypress Cloud
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: Run by cypress command line
+        default: cypress/e2e/**
+
+jobs:
+  cypress-e2e-electron:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Pegar Codigo
+      uses:  actions/checkout@v4.2.2
+
+    - name: Cypress run
+      uses: cypress-io/github-action@v6.5.0
+      with:
+        install-command: yarn install
+        browser: electron
+        record: true
+        group: Testes de Interface no Electron
+        spec: ${{ github.event.inputs.spec }}
+      env:
+        CYPRESS_RECORD_KEY: c3d547d4-bc59-46fd-895d-fa9603ed5763
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
