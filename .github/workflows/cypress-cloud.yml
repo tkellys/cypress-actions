@@ -10,6 +10,9 @@ on:
 jobs:
   cypress-e2e-electron:
     runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node-24.0.0-chrome-136.0.7103.92-1-ff-138.0.1-edge-136.0.3240.50-1
+      options: --user 1001
     steps:
     - name: Pegar Codigo
       uses:  actions/checkout@v4.2.2
@@ -21,6 +24,48 @@ jobs:
         browser: electron
         record: true
         group: Testes de Interface no Electron
+        spec: ${{ github.event.inputs.spec }}
+      env:
+        CYPRESS_RECORD_KEY: c3d547d4-bc59-46fd-895d-fa9603ed5763
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  cypress-e2e-chrome:
+    needs: cypress-e2e-electron
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node-24.0.0-chrome-136.0.7103.92-1-ff-138.0.1-edge-136.0.3240.50-1
+      options: --user 1001
+    steps:
+    - name: Pegar Codigo
+      uses:  actions/checkout@v4.2.2
+
+    - name: Cypress run
+      uses: cypress-io/github-action@v6.5.0
+      with:
+        install-command: yarn install
+        browser: chrome
+        record: true
+        group: Testes de Interface no Chrome
+        spec: ${{ github.event.inputs.spec }}
+      env:
+        CYPRESS_RECORD_KEY: c3d547d4-bc59-46fd-895d-fa9603ed5763
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  cypress-e2e-firefox:
+    needs: cypress-e2e-chrome
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node-24.0.0-chrome-136.0.7103.92-1-ff-138.0.1-edge-136.0.3240.50-1
+      options: --user 1001
+    steps:
+    - name: Pegar Codigo
+      uses:  actions/checkout@v4.2.2
+
+    - name: Cypress run
+      uses: cypress-io/github-action@v6.5.0
+      with:
+        install-command: yarn install
+        browser: firefox
+        record: true
+        group: Testes de Interface no Firefox
         spec: ${{ github.event.inputs.spec }}
       env:
         CYPRESS_RECORD_KEY: c3d547d4-bc59-46fd-895d-fa9603ed5763
