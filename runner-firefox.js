@@ -6,7 +6,7 @@ cypress.run({
 })
 .then((results) => {
   const args = {
-    target: procees.env.TARGET_TOKEN_FIREFOX,
+    target: process.env.TARGET_TOKEN_FIREFOX,
     files: './tmp/teste'
   }
   tesults.results(results, args);
